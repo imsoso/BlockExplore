@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9C2835E22D688BF600A22806 /* Web3 in Frameworks */ = {isa = PBXBuildFile; productRef = 9C2835E12D688BF600A22806 /* Web3 */; };
+		9C2835E42D688BF600A22806 /* Web3ContractABI in Frameworks */ = {isa = PBXBuildFile; productRef = 9C2835E32D688BF600A22806 /* Web3ContractABI */; };
+		9C2835E62D688BF600A22806 /* Web3PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9C2835E52D688BF600A22806 /* Web3PromiseKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		9C28355B2D688B8000A22806 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +58,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C2835E42D688BF600A22806 /* Web3ContractABI in Frameworks */,
+				9C2835E62D688BF600A22806 /* Web3PromiseKit in Frameworks */,
+				9C2835E22D688BF600A22806 /* Web3 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +121,9 @@
 			);
 			name = BlockExplore;
 			packageProductDependencies = (
+				9C2835E12D688BF600A22806 /* Web3 */,
+				9C2835E32D688BF600A22806 /* Web3ContractABI */,
+				9C2835E52D688BF600A22806 /* Web3PromiseKit */,
 			);
 			productName = BlockExplore;
 			productReference = 9C2835482D688B7F00A22806 /* BlockExplore.app */;
@@ -195,6 +207,9 @@
 			);
 			mainGroup = 9C28353F2D688B7F00A22806;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9C2835E02D688BF600A22806 /* XCRemoteSwiftPackageReference "Web3" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9C2835492D688B7F00A22806 /* Products */;
 			projectDirPath = "";
@@ -558,6 +573,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9C2835E02D688BF600A22806 /* XCRemoteSwiftPackageReference "Web3" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Boilertalk/Web3.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.8.8;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9C2835E12D688BF600A22806 /* Web3 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C2835E02D688BF600A22806 /* XCRemoteSwiftPackageReference "Web3" */;
+			productName = Web3;
+		};
+		9C2835E32D688BF600A22806 /* Web3ContractABI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C2835E02D688BF600A22806 /* XCRemoteSwiftPackageReference "Web3" */;
+			productName = Web3ContractABI;
+		};
+		9C2835E52D688BF600A22806 /* Web3PromiseKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C2835E02D688BF600A22806 /* XCRemoteSwiftPackageReference "Web3" */;
+			productName = Web3PromiseKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9C2835402D688B7F00A22806 /* Project object */;
 }
