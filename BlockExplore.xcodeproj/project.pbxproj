@@ -35,9 +35,22 @@
 		9C2835642D688B8000A22806 /* BlockExploreUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockExploreUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9C2836342D69DC9100A22806 /* Exceptions for "BlockExplore" folder in "BlockExplore" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9C2835472D688B7F00A22806 /* BlockExplore */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9C28354A2D688B7F00A22806 /* BlockExplore */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9C2836342D69DC9100A22806 /* Exceptions for "BlockExplore" folder in "BlockExplore" target */,
+			);
 			path = BlockExplore;
 			sourceTree = "<group>";
 		};
@@ -286,6 +299,8 @@
 /* Begin XCBuildConfiguration section */
 		9C28356C2D688B8000A22806 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 9C28354A2D688B7F00A22806 /* BlockExplore */;
+			baseConfigurationReferenceRelativePath = Configuration.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -349,6 +364,8 @@
 		};
 		9C28356D2D688B8000A22806 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 9C28354A2D688B7F00A22806 /* BlockExplore */;
+			baseConfigurationReferenceRelativePath = Configuration.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -414,6 +431,7 @@
 				DEVELOPMENT_TEAM = 8HFVF66PA9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BlockExplore/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -443,6 +461,7 @@
 				DEVELOPMENT_TEAM = 8HFVF66PA9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BlockExplore/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
