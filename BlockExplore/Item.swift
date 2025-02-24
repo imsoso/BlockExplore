@@ -14,10 +14,10 @@ final class Item {
     var blockNumber : String
     var blockHash : String
     var transferLog : String
-    init(timestamp: Date, blockNumber: String, blockHash: String) {
+    init(timestamp: Date, blockNumber: String, blockHash: String, transferLog: String) {
         self.timestamp = timestamp
         self.blockNumber = blockNumber
         self.blockHash = blockHash
-        self.transferLog = ""
+        self.transferLog = transferLog
     }
 }

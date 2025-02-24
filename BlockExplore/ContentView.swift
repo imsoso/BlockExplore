@@ -71,6 +71,8 @@ struct ContentView: View {
         var subId = ""
         var blockNumber: String = ""
         var blockHash: String = ""
+        var transferLog: String = ""
+
         var newItem: Item?
         
         let cancelled = NIOLockedValueBox(false)
@@ -117,7 +119,8 @@ struct ContentView: View {
                         if !logShown.withLockedValue({ let old = $0; $0 = true; return old }) {
                             blockNumber = topicValue.blockNumber?.hex().hexToDecimal() ?? ""
                             blockHash = topicValue.blockHash?.hex() ?? ""
-                            newItem = Item(timestamp: Date(), blockNumber: blockNumber, blockHash: blockHash)
+                            transferLog = "Block \(blockNumber)  \(blockHash) \(topicValue.topics[1].hex()) transfer \(topicValue.data.hex().hexToDecimal() ?? "0") USDT to \(topicValue.topics[2].hex())"
+                            newItem = Item(timestamp: Date(), blockNumber: blockNumber, blockHash: blockHash, transferLog: transferLog)
                             continuation.resume(returning: newItem!)
                         }
                     }
