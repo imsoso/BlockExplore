@@ -106,7 +106,7 @@ struct ContentView: View {
                 ethereumValue: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef")
         ]
         
-        var logShown = NIOLockedValueBox(false)
+        let logShown = NIOLockedValueBox(false)
         return try await withCheckedThrowingContinuation { continuation in
             try! web3Ws.eth.subscribeToLogs(
                 addresses: [contractAddress], topics: [topic],
