@@ -22,10 +22,23 @@ struct ContentView: View {
                         Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
                     } label: {
                         VStack(alignment: .leading) {
-                            Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                            Text("Block Number: \(item.blockNumber)")
-                            Text("Block Hash: \(item.blockHash)")
-                            Text("Transfer Log: \(item.transferLog)")
+                            Text("Time: ")
+                                .font(.system(size: 16, weight: .bold))
+                            + Text("\(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                                .font(.system(size: 16, weight: .regular))
+                            Text("Block Number: ")
+                                .font(.system(size: 16, weight: .bold))
+                            + Text("\(item.blockNumber)")
+                                .font(.system(size: 16, weight: .regular))
+                            Text("Block Hash: ")
+                                .font(.system(size: 16, weight: .bold))
+                            + Text("\(item.blockHash)")
+                                .font(.system(size: 16, weight: .regular))
+                            Text("Transfer log: ")
+                                .font(.system(size: 16, weight: .bold))
+                            + Text("\(item.transferLog)")
+                                .font(.system(size: 16, weight: .regular))
+
                         }
                     }
                 }
