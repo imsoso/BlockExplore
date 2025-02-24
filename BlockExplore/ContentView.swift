@@ -21,7 +21,12 @@ struct ContentView: View {
                     NavigationLink {
                         Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
                     } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        VStack(alignment: .leading) {
+                            Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                            Text("Block Number: \(item.blockNumber)")
+                            Text("Block Hash: \(item.blockHash)")
+                            Text("Transfer Log: \(item.transferLog)")
+                        }
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -40,12 +45,17 @@ struct ContentView: View {
             Text("Select an item")
         }
     }
-
+    
     private func addItem() {
-        withAnimation {
-            
-//            let newItem = Item(timestamp: Date(),)
-//            modelContext.insert(newItem)
+        Task {
+            do {
+                let newItem = try await requestBlcokLogs()
+                withAnimation {
+                    modelContext.insert(newItem)
+                }
+            } catch {
+                print("Failed to request block logs: \(error)")
+            }
         }
     }
 
@@ -57,16 +67,16 @@ struct ContentView: View {
         }
     }
     
-    func requestBlcokLogs() async throws {
+    func requestBlcokLogs() async throws -> Item {
         var subId = ""
         var blockNumber: String = ""
         var blockHash: String = ""
+        var newItem: Item?
         
         let cancelled = NIOLockedValueBox(false)
 
         
-        guard let infuraRPC = Bundle.main.object(forInfoDictionaryKey: "INFURA_RPC") as? String
-        else {
+        guard let infuraRPC = Bundle.main.object(forInfoDictionaryKey: "INFURA_RPC") as? String else {
             fatalError("INFURA_RPC not found in Configuration.xcconfig")
         }
 
@@ -81,61 +91,51 @@ struct ContentView: View {
                 ethereumValue: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef")
         ]
         
-        var logShown = false
-        try! web3Ws.eth.subscribeToLogs(
-            addresses: [contractAddress], topics: [topic],
-            subscribed: {
-                response in
-                subId = response.result ?? ""
-            },
-            onEvent: { log in
-                guard let topicValue = log.result else {
-                    if cancelled.withLockedValue({ $0 }) {
-                        switch log.error as? Web3Response<EthereumLogObject>.Error {
-                        case .subscriptionCancelled(_):
-                            // Expected
-                            return
-                        default:
-                            break
+        var logShown = NIOLockedValueBox(false)
+        return try await withCheckedThrowingContinuation { continuation in
+            try! web3Ws.eth.subscribeToLogs(
+                addresses: [contractAddress], topics: [topic],
+                subscribed: { response in
+                    subId = response.result ?? ""
+                },
+                onEvent: { log in
+                    guard let topicValue = log.result else {
+                        if cancelled.withLockedValue({ $0 }) {
+                            switch log.error as? Web3Response<EthereumLogObject>.Error {
+                            case .subscriptionCancelled(_):
+                                // Expected
+                                return
+                            default:
+                                break
+                            }
                         }
-
+                        return
                     }
-
-                    return
-                }
-                //The string 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef is a hexadecimal representation of a topic in the Ethereum blockchain. Specifically, it is the Keccak-256 hash of the Transfer event signature in the ERC-20 token standard, which is: Transfer(address,address,uint256). This event is emitted when tokens are transferred between addresses.This topic is used to filter and identify Transfer events in the Ethereum logs. When subscribing to logs, you can use this topic to listen for all Transfer events emitted by a specific contract.
-                if topicValue.topics.first?.hex()
-                    == "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-                    && !logShown
-                {
-                    logShown = true
-                    DispatchQueue.main.async {
-                        blockNumber = topicValue.blockNumber?.hex().hexToDecimal() ?? ""
-                        print("Topic Number: \(blockNumber)")
-                        blockHash = topicValue.blockHash?.hex() ?? ""
-                        print(
-                            "在 \(blockNumber) 区块 \(blockHash) 交易中从 \(topicValue.topics[1].hex()) 转账 \(topicValue.data.hex().hexToDecimal() ?? "0") USDT 到 \(topicValue.topics[2].hex())"
-                        )
-
+                    if topicValue.topics.first?.hex()
+                        == "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                    {
+                        if !logShown.withLockedValue({ let old = $0; $0 = true; return old }) {
+                            blockNumber = topicValue.blockNumber?.hex().hexToDecimal() ?? ""
+                            blockHash = topicValue.blockHash?.hex() ?? ""
+                            newItem = Item(timestamp: Date(), blockNumber: blockNumber, blockHash: blockHash)
+                            continuation.resume(returning: newItem!)
+                        }
                     }
-
+                    
+                    if !cancelled.withLockedValue({
+                        let old = $0
+                        $0 = true
+                        return old
+                    }) {
+                        try! web3Ws.eth.unsubscribe(
+                            subscriptionId: subId,
+                            completion: { unsubscribed in
+                                print("Unsubscribed: \(unsubscribed)")
+                            })
+                    }
                 }
-
-                if !cancelled.withLockedValue({
-                    let old = $0
-                    $0 = true
-                    return old
-                }) {
-                    try! web3Ws.eth.unsubscribe(
-                        subscriptionId: subId,
-                        completion: { unsubscribed in
-                            print("Unsubscribed: \(unsubscribed)")
-                        })
-                }
-            }
-
-        )
-
+            )
+        }
     }
 }
 
