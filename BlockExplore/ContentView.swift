@@ -13,6 +13,7 @@ import Web3
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
+    @State private var isLoading = false
 
     var body: some View {
         NavigationSplitView {
@@ -57,9 +58,26 @@ struct ContentView: View {
         } detail: {
             Text("Select an item")
         }
+        .disabled(isLoading)
+        .overlay {
+            if isLoading {
+                ProgressView("Loading...")
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .foregroundColor(.black)
+                    .padding()
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.black, lineWidth: 2)
+                    )
+                    .padding()
+            }
+        }
     }
-    
+
     private func addItem() {
+        isLoading = true
         Task {
             do {
                 let newItem = try await requestBlcokLogs()
@@ -69,6 +87,7 @@ struct ContentView: View {
             } catch {
                 print("Failed to request block logs: \(error)")
             }
+            isLoading = false
         }
     }
 
